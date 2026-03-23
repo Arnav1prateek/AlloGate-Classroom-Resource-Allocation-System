@@ -89,7 +89,7 @@ Usage reports, utilization metrics, and data-driven insights.
 ### 🔔 `notification`
 **Status:** ✅ Ready
 
-Multi-channel alerts via Email, SMS, and push notifications.
+Multi-channel alerts via Email, SMS, and push notifications. 
 
 ---
 
