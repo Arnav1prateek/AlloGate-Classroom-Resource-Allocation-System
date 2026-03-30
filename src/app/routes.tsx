@@ -1,10 +1,13 @@
 import type { ReactElement } from "react";
 import { Navigate, createBrowserRouter } from "react-router";
 import { DashboardLayout } from "./layouts/DashboardLayout";
+import { Inventory } from "./pages/Inventory";
 import { Login } from "./pages/Login";
 import { ManageRequests } from "./pages/ManageRequests";
+import { Notifications } from "./pages/Notifications";
 import { RequestResources } from "./pages/RequestResources";
 import { RequestStatus } from "./pages/RequestStatus";
+import { Reports } from "./pages/Reports";
 import { ResourceAvailability } from "./pages/ResourceAvailability";
 import { ReviewRequests } from "./pages/ReviewRequests";
 import { UpdateStatus } from "./pages/UpdateStatus";
@@ -133,6 +136,30 @@ export const router = createBrowserRouter([
         element: (
           <RoleGuard allowedRoles={["manager"]}>
             <UpdateStatus />
+          </RoleGuard>
+        ),
+      },
+      {
+        path: "inventory",
+        element: (
+          <RoleGuard allowedRoles={["admin", "manager"]}>
+            <Inventory />
+          </RoleGuard>
+        ),
+      },
+      {
+        path: "notifications",
+        element: (
+          <RoleGuard allowedRoles={["faculty"]}>
+            <Notifications />
+          </RoleGuard>
+        ),
+      },
+      {
+        path: "reports",
+        element: (
+          <RoleGuard allowedRoles={["admin"]}>
+            <Reports />
           </RoleGuard>
         ),
       },

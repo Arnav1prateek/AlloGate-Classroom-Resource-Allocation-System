@@ -1,10 +1,12 @@
 import { NavLink, Outlet, useNavigate } from "react-router";
 import {
   BookOpen,
+  Bell,
   ClipboardList,
   LayoutDashboard,
   LogOut,
   PackageSearch,
+  BarChart3,
   Shield,
   Wrench,
 } from "lucide-react";
@@ -15,14 +17,15 @@ function getNavItems(role: string) {
   if (role === "admin") {
     return [
       { path: "/app/review", label: "Review Requests", icon: Shield },
-      { path: "/app/availability", label: "Availability", icon: PackageSearch },
+      { path: "/app/inventory", label: "Inventory", icon: PackageSearch },
+      { path: "/app/reports", label: "Reports", icon: BarChart3 },
     ];
   }
 
   if (role === "manager") {
     return [
       { path: "/app/update-status", label: "Update Status", icon: Wrench },
-      { path: "/app/availability", label: "Availability", icon: PackageSearch },
+      { path: "/app/inventory", label: "Inventory", icon: PackageSearch },
     ];
   }
 
@@ -31,6 +34,7 @@ function getNavItems(role: string) {
     { path: "/app/availability", label: "View Availability", icon: PackageSearch },
     { path: "/app/manage-requests", label: "Modify / Cancel", icon: LayoutDashboard },
     { path: "/app/request-status", label: "Track Status", icon: ClipboardList },
+    { path: "/app/notifications", label: "Notifications", icon: Bell },
   ];
 }
 

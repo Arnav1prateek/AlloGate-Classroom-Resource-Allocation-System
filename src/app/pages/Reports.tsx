@@ -1,158 +1,249 @@
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend, 
+import { useEffect, useState } from "react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Pie,
+  PieChart,
   ResponsiveContainer,
-  PieChart, 
-  Pie, 
-  Cell 
-} from 'recharts';
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import { getUtilizationReport } from "../lib/api";
+import { ReportFilters, UtilizationReport } from "../lib/types";
+
+const COLORS = ["#d8fb77", "#facc15", "#86efac", "#fca5a5", "#93c5fd"];
+
+const initialFilters: ReportFilters = {
+  startDate: "",
+  endDate: "",
+  resourceName: "",
+  location: "",
+};
+
+const emptyReport: UtilizationReport = {
+  totals: {
+    total: 0,
+    approved: 0,
+    pending: 0,
+    rejected: 0,
+    cancelled: 0,
+  },
+  byResource: [],
+  byLocation: [],
+  rows: [],
+  availableResources: [],
+  locations: [],
+};
 
 export function Reports() {
-  const barData = [
-    { name: 'Projector', value: 30, fill: '#8884d8' },
-    { name: 'Chair', value: 20, fill: '#ffc658' },
-    { name: 'Whiteboard', value: 28, fill: '#82ca9d' },
-  ];
+  const [filters, setFilters] = useState<ReportFilters>(initialFilters);
+  const [report, setReport] = useState<UtilizationReport>(emptyReport);
 
-  const pieData = [
-    { name: 'Mouse', value: 400 },
-    { name: 'Mouse mat', value: 300 },
-    { name: 'CPU', value: 300 },
-    { name: 'Keyboard', value: 200 },
-    { name: 'Chairs', value: 278 },
-    { name: 'Monitor', value: 189 },
-  ];
+  async function loadReport(nextFilters = filters) {
+    const nextReport = await getUtilizationReport(nextFilters);
+    setReport(nextReport);
+  }
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#ffc658'];
-
-  const history = [
-    { id: 1, faculty: "Dr. Smith", classroom: "Regular Class", resource: "Smart Board", date: "1/02/26", status: "Approved" },
-    { id: 2, faculty: "Dr. Lee", classroom: "Computer Lab", resource: "Keyboard", date: "5/02/26", status: "Pending" },
-  ];
+  useEffect(() => {
+    loadReport(initialFilters);
+  }, []);
 
   return (
-    <div className="space-y-8">
-      <h2 className="text-3xl font-handwriting mb-6 text-center border-b-2 border-black pb-2 inline-block w-full">Utilization Reports</h2>
+    <div className="space-y-5">
+      <section>
+        <h2 className="text-[2rem] leading-none font-handwriting">Utilization Reports Dashboard</h2>
+        <p className="text-sm text-gray-600">
+          Filter by date, resource, and location to generate graphical and tabular reports.
+        </p>
+      </section>
 
-      {/* KPI Cards */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <section className="rounded-[1.5rem] border-2 border-black bg-white p-5 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]">
+        <div className="grid gap-4 md:grid-cols-4">
+          <div className="flex flex-col gap-2">
+            <label htmlFor="start-date">Start Date</label>
+            <input
+              id="start-date"
+              type="date"
+              value={filters.startDate}
+              onChange={(event) =>
+                setFilters((current) => ({
+                  ...current,
+                  startDate: event.target.value,
+                }))
+              }
+              className="h-12 rounded-[1rem] border-2 border-black px-4"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="end-date">End Date</label>
+            <input
+              id="end-date"
+              type="date"
+              value={filters.endDate}
+              onChange={(event) =>
+                setFilters((current) => ({
+                  ...current,
+                  endDate: event.target.value,
+                }))
+              }
+              className="h-12 rounded-[1rem] border-2 border-black px-4"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="resource-filter">Resource</label>
+            <select
+              id="resource-filter"
+              value={filters.resourceName}
+              onChange={(event) =>
+                setFilters((current) => ({
+                  ...current,
+                  resourceName: event.target.value,
+                }))
+              }
+              className="h-12 rounded-[1rem] border-2 border-black px-4"
+            >
+              <option value="">All Resources</option>
+              {report.availableResources.map((resourceName) => (
+                <option key={resourceName} value={resourceName}>
+                  {resourceName}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="location-filter">Location</label>
+            <select
+              id="location-filter"
+              value={filters.location}
+              onChange={(event) =>
+                setFilters((current) => ({
+                  ...current,
+                  location: event.target.value,
+                }))
+              }
+              className="h-12 rounded-[1rem] border-2 border-black px-4"
+            >
+              <option value="">All Locations</option>
+              {report.locations.map((location) => (
+                <option key={location} value={location}>
+                  {location}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="mt-4 flex gap-3">
+          <button
+            type="button"
+            onClick={() => loadReport(filters)}
+            className="rounded-[1rem] border-2 border-black bg-[#d8fb77] px-5 py-3 font-bold shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+          >
+            Generate Report
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setFilters(initialFilters);
+              loadReport(initialFilters);
+            }}
+            className="rounded-[1rem] border-2 border-black bg-white px-5 py-3 font-bold"
+          >
+            Reset Filters
+          </button>
+        </div>
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-5">
         {[
-          { title: "Total Requests", value: 150, icon: "📋", bg: "bg-yellow-100" },
-          { title: "Approved Requests", value: 120, icon: "✔", bg: "bg-lime-100" },
-          { title: "Pending Requests", value: 30, icon: "🕒", bg: "bg-orange-100" },
-        ].map((kpi, i) => (
-          <div key={i} className={`${kpi.bg} p-6 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col items-center`}>
-            <h3 className="font-bold text-xl font-handwriting mb-2">{kpi.title}</h3>
-            <div className="flex items-center gap-4 text-4xl font-bold">
-              <span>{kpi.icon}</span>
-              <span>{kpi.value}</span>
+          { label: "Total Requests", value: report.totals.total, color: "bg-yellow-100" },
+          { label: "Approved", value: report.totals.approved, color: "bg-lime-100" },
+          { label: "Pending", value: report.totals.pending, color: "bg-orange-100" },
+          { label: "Rejected", value: report.totals.rejected, color: "bg-red-100" },
+          { label: "Cancelled", value: report.totals.cancelled, color: "bg-gray-100" },
+        ].map((card) => (
+          <div
+            key={card.label}
+            className={`rounded-[1.3rem] border-2 border-black p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${card.color}`}
+          >
+            <div className="text-sm font-bold uppercase tracking-wide text-gray-600">
+              {card.label}
             </div>
+            <div className="mt-3 text-4xl font-black">{card.value}</div>
           </div>
         ))}
       </section>
 
-      {/* Charts */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="border-2 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white">
-          <div className="flex justify-between mb-4 border-b-2 border-black pb-2">
-            <h3 className="font-bold text-lg font-handwriting">Resource Utilization</h3>
-            <button className="text-xs border border-black px-2 bg-gray-100 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]">Last 30 Days ▼</button>
-          </div>
-          <div className="h-64">
+      <section className="grid gap-5 xl:grid-cols-2">
+        <div className="rounded-[1.5rem] border-2 border-black bg-white p-5 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]">
+          <h3 className="mb-4 text-[1.8rem] leading-none font-handwriting">Requests by Resource</h3>
+          <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={barData}>
+              <BarChart data={report.byResource}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
-                <YAxis />
+                <YAxis allowDecimals={false} />
                 <Tooltip />
-                <Bar dataKey="value" stroke="#000" strokeWidth={2} />
+                <Bar dataKey="value" fill="#d8fb77" stroke="#000" strokeWidth={1.5} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        <div className="border-2 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white">
-          <div className="flex justify-between mb-4 border-b-2 border-black pb-2">
-             <h3 className="font-bold text-lg font-handwriting">Resource Usage Breakdown</h3>
-          </div>
-          <div className="h-64 flex">
-            <ResponsiveContainer width="60%" height="100%">
+        <div className="rounded-[1.5rem] border-2 border-black bg-white p-5 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]">
+          <h3 className="mb-4 text-[1.8rem] leading-none font-handwriting">Requests by Location</h3>
+          <div className="h-72">
+            <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                  label
-                  stroke="#000"
-                  strokeWidth={1}
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                <Pie data={report.byLocation} dataKey="value" nameKey="name" outerRadius={95} label>
+                  {report.byLocation.map((entry, index) => (
+                    <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
+                <Tooltip />
               </PieChart>
             </ResponsiveContainer>
-            <div className="flex flex-col justify-center text-xs gap-1">
-                {pieData.map((entry, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                        <div className="w-3 h-3 border border-black" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
-                        <span>{entry.name}</span>
-                    </div>
-                ))}
-            </div>
           </div>
         </div>
       </section>
 
-      {/* Detailed History */}
-      <section>
-        <h3 className="text-2xl font-handwriting mb-4">Detailed History</h3>
-        <div className="overflow-x-auto border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white">
-          <table className="w-full text-left border-collapse">
+      <section className="rounded-[1.5rem] border-2 border-black bg-white p-5 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]">
+        <h3 className="mb-4 text-[1.8rem] leading-none font-handwriting">Tabular Report</h3>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse text-left">
             <thead>
-              <tr className="bg-white border-b-2 border-black font-handwriting text-xl">
-                <th className="p-3 border-r-2 border-black">Faculty</th>
-                <th className="p-3 border-r-2 border-black">Classroom Type</th>
-                <th className="p-3 border-r-2 border-black">Resource</th>
-                <th className="p-3 border-r-2 border-black">Date</th>
+              <tr className="border-b-2 border-black font-handwriting text-xl">
+                <th className="p-3">Faculty</th>
+                <th className="p-3">Resource</th>
+                <th className="p-3">Classroom</th>
+                <th className="p-3">Location</th>
+                <th className="p-3 text-center">Qty</th>
                 <th className="p-3 text-center">Status</th>
+                <th className="p-3">Date</th>
               </tr>
             </thead>
             <tbody>
-              {history.map((item) => (
-                <tr key={item.id} className="border-b-2 border-black last:border-b-0 hover:bg-gray-50 h-14">
-                  <td className="p-3 border-r-2 border-black font-bold">{item.faculty}</td>
-                  <td className="p-3 border-r-2 border-black">{item.classroom}</td>
-                  <td className="p-3 border-r-2 border-black">{item.resource}</td>
-                  <td className="p-3 border-r-2 border-black font-mono">{item.date}</td>
-                  <td className="p-3 text-center">
-                    <span className={`
-                      px-3 py-1 border-2 border-black rounded-full font-bold text-sm
-                      ${item.status === 'Approved' ? 'bg-lime-300' : 'bg-yellow-300'}
-                    `}>
-                      {item.status}
-                    </span>
+              {report.rows.map((row) => (
+                <tr key={row.id} className="border-b border-black/10 last:border-b-0">
+                  <td className="p-3 font-bold">{row.faculty}</td>
+                  <td className="p-3">{row.resourceName}</td>
+                  <td className="p-3">{row.classroomType}</td>
+                  <td className="p-3">{row.location}</td>
+                  <td className="p-3 text-center font-mono">{row.quantity}</td>
+                  <td className="p-3 text-center">{row.status}</td>
+                  <td className="p-3">{new Date(row.requestedAt).toLocaleString()}</td>
+                </tr>
+              ))}
+              {report.rows.length === 0 ? (
+                <tr>
+                  <td className="p-4 text-center text-gray-500" colSpan={7}>
+                    No requests match the selected filters.
                   </td>
                 </tr>
-              ))}
-               {/* Empty rows filler */}
-               {[...Array(3)].map((_, i) => (
-                <tr key={`empty-${i}`} className="border-b-2 border-black last:border-b-0 h-14">
-                  <td className="border-r-2 border-black"></td>
-                  <td className="border-r-2 border-black"></td>
-                  <td className="border-r-2 border-black"></td>
-                  <td className="border-r-2 border-black"></td>
-                  <td></td>
-                </tr>
-              ))}
+              ) : null}
             </tbody>
           </table>
         </div>
