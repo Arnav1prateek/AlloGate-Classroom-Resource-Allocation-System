@@ -1,11 +1,36 @@
+# AlloGate Classroom Resource Allocation System
 
-  # Classroom Resource Allocation
+This project is a browser-based classroom resource allocation system built with
+Vite and React. It currently includes the first five user stories:
 
-  This is a code bundle for Classroom Resource Allocation. The original project is available at https://www.figma.com/design/UvOGcxLM4pHvZOpKIi7UhX/Classroom-Resource-Allocation.
+- User login with role-based redirection
+- Request teaching resources
+- View resource availability
+- Modify or cancel requests
+- Track request status
 
-  ## Running the code
+## Running the project
 
-  Run `npm i` to install the dependencies.
+Install dependencies:
 
-  Run `npm run dev` to start the development server.
-  
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Create a production build:
+
+```bash
+npm run build
+```
+
+## Notes
+
+- The app currently uses local browser storage as a mock database.
+- Demo login accounts are shown on the login page.
+- The repository includes an MIT `LICENSE` file.
