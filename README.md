@@ -34,3 +34,5 @@ npm run build
 - The app currently uses local browser storage as a mock database.
 - Demo login accounts are shown on the login page.
 - The repository includes an MIT `LICENSE` file.
+
+
