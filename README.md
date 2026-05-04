@@ -1,169 +1,214 @@
-# AlloGate Classroom Resource Allocation System
+# 🎓 AlloGate — Classroom Resource Allocation System
 
-AlloGate is a role-based academic resource allocation platform designed to streamline how teaching resources are requested, reviewed, tracked, and maintained across classrooms and labs. The project digitizes a workflow that is often handled manually in colleges, reducing confusion around availability, approval status, and inventory usage.
+<p align="center">
+  <img src="https://img.shields.io/badge/Frontend-React-blue?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Language-TypeScript-3178C6?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Build-Vite-purple?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Styling-TailwindCSS-38B2AC?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Status-Prototype-orange?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
+</p>
 
-Built as a browser-based prototype, the system supports three operational roles:
+<p align="center">
+  <b>A structured, role-driven system that replaces messy classroom resource handling with clarity and control.</b>
+</p>
 
-- `Faculty` for submitting and managing teaching resource requests
-- `Admin` for reviewing requests, monitoring inventory, and generating reports
-- `Manager / Lab Technician` for updating resource quantities and operational status
+---
 
-## Highlights
+## 🖼️ Preview
 
-- Role-based login with dashboard redirection
-- Resource request workflow with quantity validation
-- Live resource availability and inventory views
-- Modify and cancel flow for pending requests
-- Request status tracking with auto-refresh
-- Admin approval and rejection dashboard
-- Notification system for request status changes
-- Inventory maintenance for managers and lab technicians
-- Utilization reports with filters, charts, and tables
+### 🔐 Login & Role-Based Dashboard
+![Login Demo](./assets/login.gif)
 
-## User Stories Covered
+### 📦 Resource Request Flow (Faculty)
+![Request Demo](./assets/request.gif)
 
-| Story | Feature Area | Status |
-|---|---|---|
-| US1 | User Login / Authentication | Complete |
-| US2 | Request Teaching Resources | Complete |
-| US3 | View Resource Availability | Complete |
-| US4 | Modify or Cancel Request | Complete |
-| US5 | Track Request Status | Complete |
-| US6 | Review Resource Requests | Complete |
-| US7 | View Resource Inventory | Complete |
-| US8 | Request Notifications | Complete |
-| US9 | Update Resource Status | Complete |
-| US10 | View Utilization Reports | Complete |
+### 🧑‍💼 Admin Approval System
+![Admin Demo](./assets/admin.gif)
 
-## Tech Stack
+### 🛠 Inventory Management (Manager)
+![Inventory Demo](./assets/inventory.gif)
+
+### 📊 Reports & Analytics
+![Reports Demo](./assets/reports.gif)
+
+> 📌 All demos are recorded from the running application.  
+> Assets are stored under `/assets` for easy access and version control.
+---
+
+## 🚩 Problem It Solves
+
+In most institutions, resource allocation is:
+- unstructured  
+- manually tracked  
+- prone to miscommunication  
+
+Which leads to:
+- missing requests  
+- incorrect inventory  
+- zero transparency  
+
+**AlloGate introduces a controlled workflow where every action is visible and traceable.**
+
+---
+
+## 🧠 System Overview
+
+AlloGate models a real academic workflow:
+
+```
+Faculty → Request → Admin → Approve/Reject → Manager → Maintain Inventory
+```
+
+Every step updates the system state instantly.
+
+---
+
+## 🧩 Roles
+
+### 👩‍🏫 Faculty
+- Submit requests  
+- Check availability  
+- Modify / cancel pending requests  
+- Track status  
+- Receive notifications  
+
+---
+
+### 🧑‍💼 Admin
+- Review requests  
+- Approve / reject  
+- Monitor inventory  
+- Analyze reports  
+
+---
+
+### 🛠 Manager / Lab Technician
+- Update quantities  
+- Change availability  
+- Maintain resource status  
+- Add notes  
+
+---
+
+## ⚙️ Features
+
+✔ Role-based authentication  
+✔ Smart request workflow with validation  
+✔ Live inventory tracking  
+✔ Editable request lifecycle  
+✔ Status tracking system  
+✔ Notification engine  
+✔ Admin analytics dashboard  
+✔ Real-time inventory reflection  
+
+---
+
+## 🗂 User Stories Coverage
+
+| ID   | Feature                          | Status |
+|------|----------------------------------|--------|
+| US1  | Authentication                   | ✅ |
+| US2  | Resource Request                 | ✅ |
+| US3  | Availability View                | ✅ |
+| US4  | Modify / Cancel                  | ✅ |
+| US5  | Status Tracking                  | ✅ |
+| US6  | Review Requests                  | ✅ |
+| US7  | Inventory View                   | ✅ |
+| US8  | Notifications                    | ✅ |
+| US9  | Resource Updates                 | ✅ |
+| US10 | Reports                          | ✅ |
+
+---
+
+## 🧱 Tech Stack
 
 ### Frontend
+- React  
+- TypeScript  
+- Vite  
+- React Router  
 
-- `React`
-- `TypeScript`
-- `Vite`
-- `React Router`
+### UI / Styling
+- Tailwind CSS  
+- Radix UI  
+- Lucide Icons  
+- MUI (optional components)
 
-### Styling and UI
+### Data Layer
+- localStorage (mock persistence)  
+- Central API abstraction  
+- Recharts (analytics)
 
-- `Tailwind CSS`
-- `Lucide React`
-- `Radix UI` primitives
-- `MUI` packages available in the project dependency set
+---
 
-### Data and Reporting
+## 🧪 Data Architecture
 
-- `localStorage` as a mock persistence layer
-- centralized client-side API and service logic
-- `Recharts` for utilization analytics
+All data is handled client-side using:
 
-## How the Prototype Handles Data
+```
+localStorage
+```
 
-This version of AlloGate does not use a production database yet. Instead, it uses a structured browser-side persistence model based on `localStorage`.
+### Collections:
+- users  
+- resources  
+- resourceRequests  
+- notifications  
 
-The app maintains four primary data collections:
+### Design Choice
 
-- `users`
-- `resources`
-- `resourceRequests`
-- `notifications`
+This approach ensures:
+- zero setup friction  
+- full workflow demonstration  
+- clean upgrade path to backend  
 
-All business operations go through a centralized API layer in the app. That means authentication, request creation, approval, rejection, inventory updates, notifications, and reports are handled consistently in one place rather than being scattered across UI components.
+---
 
-This approach was chosen to:
+## 🔐 Demo Credentials
 
-- demonstrate the full workflow quickly for academic evaluation
-- keep the prototype easy to run in any browser
-- avoid backend deployment complexity during the project phase
-- preserve a clean migration path to a real backend later
+| Role     | Email                     | Password     |
+|----------|--------------------------|-------------|
+| Faculty  | faculty@smartclass.edu   | faculty123  |
+| Admin    | admin@smartclass.edu     | admin123    |
+| Manager  | manager@smartclass.edu   | manager123  |
 
-## Core Modules
+---
 
-### Faculty
-
-- Login and role-based access
-- Request teaching resources
-- View resource availability
-- Modify or cancel pending requests
-- Track request status
-- View notifications
-
-### Admin
-
-- Review all pending requests
-- Approve or reject requests
-- View complete inventory
-- Monitor operational status
-- Generate utilization reports
-
-### Manager / Lab Technician
-
-- Update resource quantity
-- Update availability status
-- Add maintenance or operational notes
-- Reflect inventory changes immediately
-
-## Demo Credentials
-
-| Role | Email | Password |
-|---|---|---|
-| Faculty | `faculty@smartclass.edu` | `faculty123` |
-| Admin | `admin@smartclass.edu` | `admin123` |
-| Manager | `manager@smartclass.edu` | `manager123` |
-
-## Running the Project
-
-Install dependencies:
+## 🚀 Getting Started
 
 ```bash
 npm install
-```
-
-Start the development server:
-
-```bash
 npm run dev
 ```
 
-Create a production build:
-
-```bash
-npm run build
+Open:
 ```
-
-The Vite development server usually starts at:
-
-```text
 http://localhost:5173
 ```
 
-## Recommended Test Flow
+---
 
-### 1. Faculty Workflow
+## 🧭 Test Flow
 
-- Log in as faculty
-- Submit a resource request
-- Check availability before and after submission
-- Modify or cancel a pending request
-- Track status updates and notifications
+### Faculty
+- Submit request  
+- Modify / cancel  
+- Track status  
 
-### 2. Admin Workflow
+### Admin
+- Approve / reject  
+- Monitor impact  
 
-- Log in as admin
-- Open the request review dashboard
-- Approve or reject pending requests
-- Check inventory and report updates
+### Manager
+- Update inventory  
+- Verify system sync  
 
-### 3. Manager Workflow
+---
 
-- Log in as manager
-- Update resource quantity or operational status
-- Mark a resource unavailable
-- Verify that inventory reflects the change immediately
+## 🗃 Project Structure
 
-## Project Structure
-
-```text
+```
 src/
   app/
     layouts/
@@ -184,24 +229,51 @@ src/
       Reports.tsx
 ```
 
-## Functional Scope
+---
 
-The current version is a complete functional prototype, but it is not yet a production-grade full-stack deployment. It currently does not include:
+## ⚠️ Current Limitations
 
-- a live backend server
-- a hosted relational or NoSQL database
-- secure hashed authentication
-- multi-user real-time synchronization across devices
+- No backend  
+- No database  
+- No authentication security  
+- No real-time sync  
 
-## Future Improvements
+---
 
-- migrate to `Node.js + Express`, `Firebase`, or another backend stack
-- connect to `Firestore`, `MongoDB`, or `PostgreSQL`
-- add secure authentication and authorization tokens
-- support real-time updates across users
-- add timetable-aware booking and scheduling
-- integrate email or push notifications
+## 🔮 Future Scope
 
-## License
+- Backend (Node.js / Express)  
+- Database (PostgreSQL / MongoDB / Firebase)  
+- JWT authentication  
+- Real-time updates  
+- Smart scheduling system  
+- Email / push notifications  
 
-This repository includes an MIT `LICENSE` file.
+---
+
+## 🏗️ Design Philosophy
+
+> Systems fail when decisions are invisible.
+
+AlloGate enforces:
+- visibility  
+- accountability  
+- structured flow  
+
+---
+
+## 📄 License
+
+MIT License
+
+---
+
+## ✨ Portfolio Note
+
+This project demonstrates:
+- system design thinking  
+- role-based architecture  
+- frontend state management  
+- workflow modeling  
+
+It’s not just UI — it’s a **complete process simulation**.
